@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trazados de Figuras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+        h1 {
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        .container {
+            margin-bottom: 20px;
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+        canvas {
+            border: 1px solid black;
+            margin-bottom: 20px;
+            display: block;
+        }
+        .hidden {
+            display: none;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Trazados de Figuras</h1>
+    
+    <div class="container">
+        <label for="color-fondo">Color de fondo de la página:</label>
+        <input type="color" id="color-fondo" value="#ffffff" onchange="cambiarColorFondo()">
+    </div>
+
+    <div class="container">
+        <label for="figura">Selecciona la figura:</label>
+        <select id="figura">
+            <option value="star">Estrella</option>
+            <option value="square">Cuadrado</option>
+            <option value="circle">Círculo</option>
+            <option value="triangle">Triángulo</option>
+            <option value="rectangle">Rectángulo</option>
+            <option value="pentagon">Pentágono</option>
+            <option value="dibujar">Dibujar</option>
+        </select>
+    </div>
+    
+    <div class="container">
+        <label for="tipo-coordenadas">Tipo de coordenadas:</label>
+        <select id="tipo-coordenadas" onchange="actualizarCampos()">
+            <option value="cartesian">Cartesiana</option>
+            <option value="polar">Polar</option>
+        </select>
+    </div>
+
+    <div class="container hidden" id="coords-cartesianas">
+        <label for="x">Coordenada x (centro):</label>
+        <input type="number" id="x" placeholder="x" min="0">
+        <label for="y">Coordenada y (centro):</label>
+        <input type="number" id="y" placeholder="y" min="0">
+    </div>
+    
+    <div class="container hidden" id="coords-polars">
+        <label for="r">Radio:</label>
+        <input type="number" id="r" placeholder="r" min="0">
+        <label for="theta">Ángulo θ:</label>
+        <input type="number" id="theta" placeholder="θ" min="0" max="360">
+    </div>
+
+    <div class="container">
+        <label for="tamaño">Tamaño de la figura:</label>
+        <input type="number" id="tamaño" placeholder="Tamaño" min="0">
+        <p id="info-coords">Las coordenadas deben estar entre 0 y 800 (x) y 0 y 600 (y), que es el tamaño del canvas.</p>
+    </div>
+
+    <div class="container">
+        <label for="color-relleno">Color de relleno:</label>
+        <input type="color" id="color-relleno" value="#000000">
+    </div>
+
+    <div class="container">
+        <label for="color-borde">Color del borde:</label>
+        <input type="color" id="color-borde" value="#000000">
+    </div>
+    
+    <canvas id="miCanvas" width="800" height="600"></canvas>
+    
+    <button onclick="dibujar()">Dibujar</button>
+    
+    <script src="figuras2Dcomit4.js"></script>
+</body>
+</html>
