@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dibujo de Polígonos Regulares</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        canvas {
+            border: 1px solid black;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>Dibuja tu polígono regular</h2>
+    <form id="mainForm">
+        <label for="n">Número de lados (n):</label>
+        <input type="number" id="n" min="3" required><br><br>
+        
+        <label for="measurementType">Tipo de medida:</label>
+        <select id="measurementType" name="measurementType" onchange="toggleMeasurementInputs()">
+            <option value="apotema">Apotema</option>
+            <option value="lado">Lado</option>
+        </select><br><br>
+
+        <div id="apotemaInput">
+            <label for="a">Apotema (a):</label>
+            <input type="number" id="a" step="0.01"><br><br>
+        </div>
+
+        <div id="ladoInput" class="hidden">
+            <label for="L">Lado (L):</label>
+            <input type="number" id="L" step="0.01"><br><br>
+        </div>
+
+        <label for="coordType">Tipo de coordenada del centro:</label>
+        <select id="coordType" name="coordType" onchange="toggleCoordInputs()">
+            <option value="cartesian">Cartesiana</option>
+            <option value="polar">Polar</option>
+        </select><br><br>
+
+        <div id="cartesianInputs">
+            <label for="x">Coordenada X:</label>
+            <input type="number" id="x" required><br><br>
+            <label for="y">Coordenada Y:</label>
+            <input type="number" id="y" required><br><br>
+        </div>
+
+        <div id="polarInputs" class="hidden">
+            <label for="r">Radio (r):</label>
+            <input type="number" id="r" step="0.01" required><br><br>
+            <label for="theta">Ángulo (θ en grados):</label>
+            <input type="number" id="theta" step="0.01" required><br><br>
+        </div>
+
+        <button type="button" onclick="handleDrawing()">Dibujar</button>
+    </form>
+
+    <canvas id="canvas" width="500" height="500"></canvas>
+
+    <script src="parcial1-ok.js"></script>
+</body>
+</html>
