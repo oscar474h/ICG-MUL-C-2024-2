@@ -82,13 +82,76 @@ function handleDrawing() {
     if (radius === null) return;
 
     // Obtiene las coordenadas del centro según el tipo de coordenada seleccionado
-    let center;
-    if (coordType === 'cartesian') {
-        const x = parseFloat(document.getElementById('x').value);
-        const y = parseFloat(document.getElementById('y').value);
-        center = new Cartesiana(x, y);
+    const { cx, cy } = coordType === 'cartesian' 
+        ? getCartesianCoords()
+        : getPolarCoords();
+
+    // Dibuja el polígono en el canvas
+    drawPolygon(n, radius, cx, cy);
+}
+
+function getCartesianCoords() {
+    const cx = parseFloat(document.getElementById('x').value);
+    const cy = parseFloat(document.getElementById('y').value);
+    return { cx, cy };
+}
+
+function getPolarCoords() {
+    const r = parseFloat(document.getElementById('r').value);
+    const theta = parseFloat(document.getElementById('theta').value) * (Math.PI / 180); // Conversión a radianes
+    const cx = r * Math.cos(theta); // Conversión de coordenadas polares a cartesianas
+    const cy = r * Math.sin(theta);
+    return { cx, cy };
+}
+
+function calculateRadius(measurementType, a, L, n) {
+    if (measurementType === 'apotema') {
+        if (!isNaN(a)) {
+            // Fórmula para calcular el radio a partir del apotema
+            return a / Math.cos(Math.PI / n);
+        } else {
+            alert("Debes ingresar el apotema.");
+            return null;
+        }
+    } else if (measurementType === 'lado') {
+        if (!isNaN(L)) {
+            // Fórmula para calcular el radio a partir del lado
+            return L / (2 * Math.sin(Math.PI / n));
+        } else {
+            alert("Debes ingresar el lado.");
+            return null;
+        }
     } else {
-        const r = parseFloat(document.getElementById('r').value);
-        const theta = parseFloat(document.getElementById('theta').value);
-        const polarCoord = new Polar(r, theta);
- 
+        alert("Selecciona un tipo de medida.");
+        return null;
+    }
+}
+
+function drawPolygon(n, radius, cx, cy) {
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+    ctx.beginPath();
+
+    const startAngle = Math.PI / 2 - Math.PI / n;
+
+    for (let i = 0; i < n; i++) {
+        const angle = startAngle + (2 * Math.PI * i / n);
+        const x = cx + radius * Math.cos(angle);
+        const y = cy + radius * Math.sin(angle);
+
+        if (i === 0) {
+            ctx.moveTo(x, y);
+        } else {
+            ctx.lineTo(x, y);
+        }
+    }
+
+    ctx.closePath();
+    ctx.stroke();
+}
+
