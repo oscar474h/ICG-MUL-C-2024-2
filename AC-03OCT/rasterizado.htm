@@ -1,36 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Figura Rasterizada</title>
-  <script src="rasterizado.js" defer></script>
-  <style>
-    canvas { 
-      border: 1px solid black; 
-    }
-    button {
-      background-color: #4CAF50; /* Color verde */
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 16px;
-      margin-top: 10px;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-    button:hover {
-      background-color: #45a049; /* Color más oscuro al pasar el cursor */
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polígono Rasterizado</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Figura Poligonal - Rasterizada</h1>
-  <canvas id="canvasRasterizado" width="500" height="500"></canvas>
-  <p id="tipoPoligono"></p>
-  <button id="generarBtn">🎨 Generar Figura</button> <!-- Botón estilizado con emoji -->
+    <h1>Generar Polígono Rasterizado</h1>
+    <button id="generarBtn">🖌️ Generar Figura</button>
+    <div id="tipoPoligono"></div>
+    <canvas id="canvasRasterizado" width="500" height="500" style="border:1px solid black;"></canvas>
+
+    <script src="rasterizado.js"></script>
 </body>
 </html>
