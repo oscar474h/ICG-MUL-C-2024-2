@@ -16,10 +16,36 @@ class Punto {
     }
   }
   
+  // Función para generar un número aleatorio de puntos entre 3 y 20
+  function generarPuntosAleatorios(maxX, maxY) {
+    const numPuntos = Math.floor(Math.random() * (20 - 3 + 1)) + 3; // Número entre 3 y 20
+    let puntos = [];
+    
+    for (let i = 0; i < numPuntos; i++) {
+      let x = Math.random() * maxX;
+      let y = Math.random() * maxY;
+      puntos.push(new Punto(x, y));
+    }
+    
+    return puntos;
+  }
+  
+  // Función para generar un color aleatorio
+  function generarColorAleatorio() {
+    const letras = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letras[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+  
   // Función para dibujar la figura en el canvas rasterizado
   function dibujarRasterizado(puntos) {
     const canvas = document.getElementById('canvasRasterizado');
     const ctx = canvas.getContext('2d');
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el canvas
     
     ctx.beginPath();
     ctx.moveTo(puntos[0].getX(), puntos[0].getY());
@@ -29,12 +55,15 @@ class Punto {
     });
     
     ctx.closePath();
+    ctx.strokeStyle = 'black';
+    ctx.fillStyle = generarColorAleatorio(); // Color aleatorio
+    ctx.fill();
     ctx.stroke();
   
     document.getElementById('tipoPoligono').textContent = `Tipo de Polígono: ${determinarTipoPoligono(puntos)}`;
   }
   
-  // Algoritmo para determinar si el polígono es cóncavo o convexo (mismo que en vectorizado.js)
+  // Algoritmo para determinar si el polígono es cóncavo o convexo
   function determinarTipoPoligono(puntos) {
     let esConvexo = true;
     let n = puntos.length;
@@ -54,14 +83,17 @@ class Punto {
     return esConvexo ? 'Convexo' : 'Cóncavo';
   }
   
-  // Lista de puntos (modifica según sea necesario)
-  let puntos = [
-    new Punto(100, 100),
-    new Punto(200, 150),
-    new Punto(150, 250),
-    new Punto(50, 200)
-  ];
+  // Función que se llama al hacer clic en "Generar Figura"
+  function generarFigura() {
+    const maxX = 500;
+    const maxY = 500;
+    let puntos = generarPuntosAleatorios(maxX, maxY);
+    dibujarRasterizado(puntos);
+  }
   
-  // Llamar a la función para dibujar y determinar el tipo de polígono
-  dibujarRasterizado(puntos);
+  // Añadir el evento de clic al botón
+  document.getElementById('generarBtn').addEventListener('click', generarFigura);
+  
+  // Generar la primera figura al cargar la página
+  generarFigura();
   
