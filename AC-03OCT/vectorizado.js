@@ -16,18 +16,33 @@ class Punto {
     }
   }
   
-  // Función para generar un número aleatorio de puntos entre 3 y 20
+  // Función para generar un número aleatorio de puntos entre 3 y 15
   function generarPuntosAleatorios(maxX, maxY) {
-    const numPuntos = Math.floor(Math.random() * (20 - 3 + 1)) + 3; // Número entre 3 y 20
+    const numPuntos = Math.floor(Math.random() * (15 - 3 + 1)) + 3; // Número entre 3 y 15
     let puntos = [];
     
+    // Generar puntos aleatorios
     for (let i = 0; i < numPuntos; i++) {
       let x = Math.random() * maxX;
       let y = Math.random() * maxY;
       puntos.push(new Punto(x, y));
     }
+  
+    // Centramos los puntos en el lienzo
+    return centrarPuntos(puntos, maxX, maxY);
+  }
+  
+  // Función para centrar los puntos en el canvas
+  function centrarPuntos(puntos, maxX, maxY) {
+    let minX = Math.min(...puntos.map(p => p.getX()));
+    let minY = Math.min(...puntos.map(p => p.getY()));
+    let maxXCoord = Math.max(...puntos.map(p => p.getX()));
+    let maxYCoord = Math.max(...puntos.map(p => p.getY()));
     
-    return puntos;
+    let offsetX = (maxX - (maxXCoord - minX)) / 2 - minX;
+    let offsetY = (maxY - (maxYCoord - minY)) / 2 - minY;
+  
+    return puntos.map(p => new Punto(p.getX() + offsetX, p.getY() + offsetY));
   }
   
   // Función para generar un color aleatorio
@@ -45,15 +60,18 @@ class Punto {
     const svg = document.getElementById('canvasVectorizado');
     svg.innerHTML = ''; // Limpiar el contenido anterior
   
+    // Crear el polígono
     const poligono = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
     let puntosStr = puntos.map(p => `${p.getX()},${p.getY()}`).join(' ');
-    
+  
+    // Atributos del polígono
     poligono.setAttribute('points', puntosStr);
     poligono.setAttribute('fill', generarColorAleatorio()); // Color aleatorio
     poligono.setAttribute('stroke', 'black');
     
     svg.appendChild(poligono);
     
+    // Mostrar si es cóncavo o convexo
     document.getElementById('tipoPoligono').textContent = `Tipo de Polígono: ${determinarTipoPoligono(puntos)}`;
   }
   
@@ -63,6 +81,7 @@ class Punto {
     let n = puntos.length;
     let signos = [];
   
+    // Determinar el signo del producto cruzado entre los vectores de cada lado
     for (let i = 0; i < n; i++) {
       let dx1 = puntos[(i + 1) % n].getX() - puntos[i].getX();
       let dy1 = puntos[(i + 1) % n].getY() - puntos[i].getY();

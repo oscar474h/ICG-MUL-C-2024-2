@@ -16,18 +16,33 @@ class Punto {
     }
   }
   
-  // Función para generar un número aleatorio de puntos entre 3 y 20
+  // Función para generar un número aleatorio de puntos entre 3 y 15
   function generarPuntosAleatorios(maxX, maxY) {
-    const numPuntos = Math.floor(Math.random() * (20 - 3 + 1)) + 3; // Número entre 3 y 20
+    const numPuntos = Math.floor(Math.random() * (15 - 3 + 1)) + 3; // Número entre 3 y 15
     let puntos = [];
     
+    // Generar puntos aleatorios
     for (let i = 0; i < numPuntos; i++) {
       let x = Math.random() * maxX;
       let y = Math.random() * maxY;
       puntos.push(new Punto(x, y));
     }
+  
+    // Centramos los puntos en el lienzo
+    return centrarPuntos(puntos, maxX, maxY);
+  }
+  
+  // Función para centrar los puntos en el canvas
+  function centrarPuntos(puntos, maxX, maxY) {
+    let minX = Math.min(...puntos.map(p => p.getX()));
+    let minY = Math.min(...puntos.map(p => p.getY()));
+    let maxXCoord = Math.max(...puntos.map(p => p.getX()));
+    let maxYCoord = Math.max(...puntos.map(p => p.getY()));
     
-    return puntos;
+    let offsetX = (maxX - (maxXCoord - minX)) / 2 - minX;
+    let offsetY = (maxY - (maxYCoord - minY)) / 2 - minY;
+  
+    return puntos.map(p => new Punto(p.getX() + offsetX, p.getY() + offsetY));
   }
   
   // Función para generar un color aleatorio
@@ -40,26 +55,26 @@ class Punto {
     return color;
   }
   
-  // Función para dibujar la figura en el canvas rasterizado
+  // Función para dibujar la figura en el canvas (rasterizado)
   function dibujarRasterizado(puntos) {
     const canvas = document.getElementById('canvasRasterizado');
     const ctx = canvas.getContext('2d');
-    
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el canvas
-    
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el canvas antes de dibujar
+  
     ctx.beginPath();
     ctx.moveTo(puntos[0].getX(), puntos[0].getY());
   
-    puntos.forEach(punto => {
-      ctx.lineTo(punto.getX(), punto.getY());
-    });
-    
+    // Dibujar líneas entre los puntos
+    for (let i = 1; i < puntos.length; i++) {
+      ctx.lineTo(puntos[i].getX(), puntos[i].getY());
+    }
     ctx.closePath();
-    ctx.strokeStyle = 'black';
-    ctx.fillStyle = generarColorAleatorio(); // Color aleatorio
+    
+    ctx.fillStyle = generarColorAleatorio(); // Asignar un color aleatorio
     ctx.fill();
-    ctx.stroke();
-  
+    ctx.stroke(); // Dibujar el contorno en negro
+    
+    // Mostrar si es cóncavo o convexo
     document.getElementById('tipoPoligono').textContent = `Tipo de Polígono: ${determinarTipoPoligono(puntos)}`;
   }
   
@@ -69,6 +84,7 @@ class Punto {
     let n = puntos.length;
     let signos = [];
   
+    // Determinar el signo del producto cruzado entre los vectores de cada lado
     for (let i = 0; i < n; i++) {
       let dx1 = puntos[(i + 1) % n].getX() - puntos[i].getX();
       let dy1 = puntos[(i + 1) % n].getY() - puntos[i].getY();
